@@ -55,11 +55,11 @@ public class MainController {
             return redirectView;
         }
     }
-    /*@GetMapping("/asd")
+    @GetMapping("/asd")
     public String asd(@RequestParam("file") String str){
         System.out.println(str);
         return "index.html";
-    }*/
+    }
     @GetMapping("/ServerAnalizedData")
     public String getAnalizedDataByNN(@RequestParam("file") String str){
         return "index.html";

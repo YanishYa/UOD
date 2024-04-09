@@ -2,18 +2,204 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск аномалий</title>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-base.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .left {
+            width: 70%;
+            padding: 10px;
+        }
+
+        .left-left {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .right {
+            width: 20%;
+            padding: 10px;
+        }
+
+        .right-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .buttons {
+            margin-bottom: 20px;
+        }
+
+        .graph {
+            width: 80%;
+            height: 350px;
+            border: 1px solid #ccc;
+            margin: 10px 10px;
+        }
+
+        .anomalies {
+            width: 40%;
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #4ca0af; /* Зеленый цвет фона */
+            border: none;
+            color: white; /* Белый цвет текста */
+            padding: 10px 20px; /* Отступы внутри кнопки */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px; /* Внешние отступы */
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2e5e67; /* Цвет фона при наведении */
+        }
+
+        #chartBefore{
+            width: 100%;
+            height: 100%;
+        }
+
+        #chartAfter{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
-<form method="POST" enctype="multipart/form-data"
-      action="/ServerApi">
-    <div>
-        <label for="file">File to upload: </label>
-        <input type="file" name="file" id = "file">
+<h1>Поиск аномалий во временных рядах</h1>
+<div class="container">
+    <div class="left">
+        <div class="left-left">
+            <div class="graph">
+                <div id="chartBefore"></div>
+            </div>
+            <div class="graph">
+                <div id="chartAfter"></div>
+            </div>
+        </div>
+        <div class="container">
+            <select class="anomalies">
+                <option value="1">Поток 1</option>
+                <option value="2">Поток 2</option>
+                <option value="3">Поток 3</option>
+                <option value="4">Поток 4</option>
+                <option value="5">Поток 5</option>
+                <option value="6">Поток 6</option>
+                <option value="7">Все потоки</option>
+            </select>
+        </div>
     </div>
-    <div>
-        <input type="submit" value="Upload">
-    </div>
-</form>
+        <div class="right">
+            <div class="buttons right-right">
+                <form action = "/ServerApi" method="post" enctype="multipart/form-data">
+                    <button>СТАРТ</button>
+                <input type="file" accept=".txt" style="padding: 14px" name="file" id="file">
+                </form>
+
+                <button style="margin: 100px 0">Выгрузить JSON</button>
+            </div>
+        </div>
+</div>
+
+<script>
+    // anychart.onDocumentReady(function() {
+    //     var dataBefore = [];
+    //     for (var i = 1; i <= 5; i++) {
+    //         dataBefore.push({ "x": i.toString(), "value": Math.floor(Math.random() * 100) });
+    //     }
+    //
+    //     var chartBefore = anychart.line(dataBefore);
+    //     chartBefore.title("График до поиска аномалий");
+    //
+    //     chartBefore.container("chartBefore");
+    //     chartBefore.draw();
+    // });
+    //
+    // anychart.onDocumentReady(function() {
+    //     var dataAfter = [];
+    //     for (var i = 1; i <= 5; i++) {
+    //         dataAfter.push({ "x": i.toString(), "value": Math.floor(Math.random() * 50) });
+    //     }
+    //
+    //     var chartAfter = anychart.line(dataAfter);
+    //     chartAfter.title("График поиска аномалий");
+    //
+    //     chartAfter.container("chartAfter");
+    //     chartAfter.draw();
+    // });
+    // Изначальные данные для графиков
+    let initialDataBefore = generateRandomData(5);
+    let initialDataAfter = generateRandomData(5);
+
+    // Отрисовка изначальных графиков
+    updateChart('chartBefore', initialDataBefore, 'График до поиска аномалий');
+    updateChart('chartAfter', initialDataAfter, 'График поиска аномалий');
+
+    // Обработчик события изменения значения в списке
+    document.querySelector('.anomalies').addEventListener('change', function() {
+        let selectedValue = this.value;
+
+        let newDataBefore = generateRandomData(selectedValue);
+        let newDataAfter = generateRandomData(selectedValue);
+
+        // Обновление и перерисовка графиков
+        updateChart('chartBefore', newDataBefore, 'График до поиска аномалий');
+        updateChart('chartAfter', newDataAfter, 'График поиска аномалий');
+    });
+
+    function generateRandomData(selectedValue) {
+        let newData = [];
+        for (let i = 1; i <= selectedValue; i++) {
+            newData.push({ "x": i.toString(), "value": Math.floor(Math.random() * 100) });
+        }
+        return newData;
+    }
+
+    function updateChart(chartId, data, title) {
+        let chart = anychart.line(data);
+        chart.title(title);
+
+        // Очистка контейнера графика
+        document.getElementById(chartId).innerHTML = '';
+
+        chart.container(chartId);
+        chart.draw();
+    }
+
+</script>
+
 </body>
 </html>
