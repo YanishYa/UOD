@@ -73,11 +73,18 @@ def Build_and_Train():
     model2 = linear_model.LogisticRegression(C=1.0, penalty='l2', tol=1e-6)
     model2.fit(X_train_under_vec, y_train_under_vec)
 
+    y_pred = model2.predict(X_test_under_vec)
+    accuracy = accuracy_score(y_test_under_vec, y_pred)
+    print("Accuracy: %.2f%%" % (accuracy * 100.0))
+
+    report = classification_report(y_test_under_vec, y_pred)
+    print(report)
+
     return model2
 
 if __name__ == '__main__':
 	model = Build_and_Train()
 
-	filename = 'model_v1.pk'
+	filename = 'models/model_v1.pk'
 	with open('../pythonProject/'+filename, 'wb') as file:
 		pickle.dump(model, file)
