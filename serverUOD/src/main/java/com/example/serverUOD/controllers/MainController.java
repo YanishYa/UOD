@@ -116,7 +116,7 @@ public class MainController {
         } else {
             System.out.println("Вам не удалось загрузить");
             /*return "Вам не удалось загрузить " + file.getOriginalFilename() + " потому что файл пустой.";*/
-            return "redirectView";
+            return "index.html";
         }
     }
     @GetMapping("/asd")
