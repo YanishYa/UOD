@@ -50,7 +50,7 @@ import java.util.List;
 @RequestMapping("/ServerApi")*/
 @Controller
 public class MainController {
-    String urlForPostFileForAnalize = "127.0.0.1:5000/predict";
+    String urlForPostFileForAnalize = "http://127.0.0.1:5000/predict";
     String urlForPostFileForAllAnalize = "dsa";
     @GetMapping
     public String main(Model model){
