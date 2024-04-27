@@ -77,7 +77,7 @@ public class MainController {
             try {
 
                 byte[] bytes = file.getBytes();
-                String currentPath = System.getProperty("user.dir") + "\\src\\main\\resources\\files\\text.txt";
+                String currentPath = System.getProperty("user.dir") + "\\src\\main\\resources\\files\\test.txt";
                 file.transferTo(new File(currentPath));
                 Gson gson = new Gson();
                 JsonReader jsonReader = new JsonReader(new FileReader(currentPath));
@@ -95,7 +95,7 @@ public class MainController {
                 OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
                 writer.write(json);
                 writer.flush();
-
+                System.out.println(connection.getResponseMessage());
                 // Считываем ответ от сервера
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line;
