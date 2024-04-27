@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="en">-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -127,13 +128,13 @@
                 <form action = "/ServerApi" method="post" enctype="multipart/form-data">
                     <button>СТАРТ</button>
                 <input type="file" accept=".txt" style="padding: 14px" name="file" id="file">
-                </form>
 
-                <button style="margin: 100px 0">Выгрузить JSON</button>
+                </form>
+                <button style="margin: 100px 0" onclick="function()">Выгрузить JSON</button>
             </div>
         </div>
 </div>
-
+<!--<div hidden="hidden" th:text="${json}"></div>-->
 <script>
     // anychart.onDocumentReady(function() {
     //     var dataBefore = [];
