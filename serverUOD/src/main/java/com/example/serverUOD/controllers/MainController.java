@@ -94,7 +94,6 @@ public class MainController {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setDoOutput(true);
-                System.out.println(json);
                 // Записываем тело запроса в поток вывода
                 OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
                 writer.write(json);
@@ -109,6 +108,7 @@ public class MainController {
                 }
                 reader.close();
 
+                System.out.println(response.toString().replace("/", ""));
                 // Выводим ответ от сервера
                 return response.toString();
             } catch (Exception e) {
