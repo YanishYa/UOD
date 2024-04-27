@@ -80,9 +80,13 @@ public class MainController {
                 String currentPath = System.getProperty("user.dir") + "\\src\\main\\resources\\files\\test.txt";
                 file.transferTo(new File(currentPath));
                 Gson gson = new Gson();
-                JsonReader jsonReader = new JsonReader(new FileReader(currentPath));
-                TypeToken<List<Data>> listDataTT = new TypeToken<>(){};
-                String json = gson.fromJson(jsonReader, listDataTT).toString();
+                BufferedReader r = new BufferedReader(new FileReader(currentPath));
+                String json = "";
+                String line = "";
+                while ((line = r.readLine()) != null){
+                    json += line;
+                }
+
 
                 URL url = new URL(urlForPostFileForAnalize);
 
@@ -90,7 +94,7 @@ public class MainController {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setDoOutput(true);
-
+                System.out.println(json);
                 // Записываем тело запроса в поток вывода
                 OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
                 writer.write(json);
@@ -98,7 +102,7 @@ public class MainController {
                 System.out.println(connection.getResponseMessage());
                 // Считываем ответ от сервера
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line;
+                line = "";
                 StringBuilder response = new StringBuilder();
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
@@ -106,8 +110,7 @@ public class MainController {
                 reader.close();
 
                 // Выводим ответ от сервера
-                System.out.println(response.toString());
-                return "index.html";
+                return response.toString();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 return "index.html";
