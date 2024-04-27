@@ -77,7 +77,7 @@ public class MainController {
             try {
 
                 byte[] bytes = file.getBytes();
-                String currentPath = System.getProperty("user.dir") + "\\src\\main\\resources\\files\\" + file.getOriginalFilename();
+                String currentPath = System.getProperty("user.dir") + "\\src\\main\\resources\\files\\text.txt";
                 file.transferTo(new File(currentPath));
                 Gson gson = new Gson();
                 JsonReader jsonReader = new JsonReader(new FileReader(currentPath));
