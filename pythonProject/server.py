@@ -18,6 +18,7 @@ def apicall():
         # test_json = request.get_json()
         test_s = json.loads(test_str)
         test = pd.DataFrame(test_s)
+        test.sort_values(by=['timestamp'], inplace=True)
         # test = pd.read_json(test_json, orient='records')
         # test = pd.read_json('time-interval.json')
         test_X = test.loc[:, test.columns != "timestamp"]
@@ -57,6 +58,7 @@ def apicall_ch():
         # test_json = request.get_json()
         test_s = json.loads(test_str)
         test = pd.DataFrame(test_s)
+        test.sort_values(by=['timestamp'], inplace=True)
         # test = pd.read_json(test_json, orient='records')
         # test = pd.read_json('time-interval.json')
 
