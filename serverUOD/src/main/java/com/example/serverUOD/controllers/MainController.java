@@ -108,7 +108,7 @@ public class MainController {
                 }
                 reader.close();
 
-                System.out.println(response.toString().replace("/", ""));
+                System.out.println(response.toString().replace("\\", ""));
                 // Выводим ответ от сервера
                 return response.toString();
             } catch (Exception e) {
