@@ -51,7 +51,7 @@ import java.util.List;
 @Controller
 public class MainController {
     String urlForPostFileForAnalize = "http://127.0.0.1:5000/predict";
-    String urlForPostFileForAllAnalize = "dsa";
+    String urlForPostFileForAllAnalize = "http://127.0.0.1:5000/predictch";
     @GetMapping
     public String main(Model model){
         String currentPath = System.getProperty("user.dir") + "\\src\\main\\resources\\files\\text.txt";
@@ -69,7 +69,7 @@ public class MainController {
         return "index.html";
     }
 
-    @PostMapping("/ServerApi")
+    @PostMapping("/ServerApi/getByOne")
     public String fileUpload(@RequestParam("file") MultipartFile file, Model model){
 
 
@@ -122,11 +122,65 @@ public class MainController {
             return "index.html";
         }
     }
+    @PostMapping("/ServerApi/getAll")
+    public String fileUploadAll(@RequestParam("file") MultipartFile file, Model model){
+
+
+        if (!file.isEmpty()) {
+            try {
+
+                byte[] bytes = file.getBytes();
+                String currentPath = System.getProperty("user.dir") + "\\src\\main\\resources\\files\\test.txt";
+                file.transferTo(new File(currentPath));
+                Gson gson = new Gson();
+                BufferedReader r = new BufferedReader(new FileReader(currentPath));
+                String json = "";
+                String line = "";
+                while ((line = r.readLine()) != null){
+                    json += line;
+                }
+
+
+                URL url = new URL(urlForPostFileForAllAnalize);
+
+                // Создаем объект HttpURLConnection и настраиваем его
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                // Записываем тело запроса в поток вывода
+                OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+                writer.write(json);
+                writer.flush();
+                System.out.println(connection.getResponseMessage());
+                // Считываем ответ от сервера
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                line = "";
+                StringBuilder response = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                System.out.println(response.toString().replace("\\", ""));
+                // Выводим ответ от сервера
+                return response.toString();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return "index.html";
+                /*return "Вам не удалось загрузить " + file.getOriginalFilename() + " => " + e.getMessage();*/
+            }
+        } else {
+            System.out.println("Вам не удалось загрузить");
+            /*return "Вам не удалось загрузить " + file.getOriginalFilename() + " потому что файл пустой.";*/
+            return "index.html";
+        }
+    }
     @GetMapping("/asd")
     public String asd(@RequestParam("file") String str){
         System.out.println(str);
         return "index.html";
     }
+
     @GetMapping("/ServerAnalizedData")
     public String getAnalizedDataByNN(@RequestParam("file") String str){
         return "index.html";
