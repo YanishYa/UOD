@@ -14,10 +14,15 @@ def apicall():
     Pandas dataframe (sent as a payload) from API Call
     """
     try:
-        test_json = request.get_json()
-        test = pd.read_json(test_json, orient='records')
+        test_str = request.get_data(as_text=True)
+        # test_json = request.get_json()
+        print("hi")
+        test_s = json.loads(test_str)
+        test = pd.DataFrame(test_s)
+        print("hi")
+        # test = pd.read_json(test_json, orient='records')
         # test = pd.read_json('time-interval.json')
-
+        print("hi")
         test_X = test.loc[:, test.columns != "timestamp"]
 
     except Exception as e:
