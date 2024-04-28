@@ -81,6 +81,6 @@ def Build_and_Train_ch():
 if __name__ == '__main__':
 	model = Build_and_Train_ch()
 
-	filename = 'models/model_temp.pk'
-	with open('../pythonProject/'+filename, 'wb') as file:
-		pickle.dump(model, file)
+	# filename = 'models/model_temp.pk'
+	# with open('../pythonProject/'+filename, 'wb') as file:
+	# 	pickle.dump(model, file)
